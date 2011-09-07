@@ -4,11 +4,13 @@ Vagrant::Config.run do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "lucid32"
+  # config.vm.box = "lucid32"
+  config.vm.box = "ubuntu"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
   # config.vm.box_url = "http://domain.com/path/to/above.box"
+  config.vm.box_url = "http://dl.dropbox.com/u/7490647/talifun-ubuntu-11.04-server-i386.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   # config.vm.boot_mode = :gui
@@ -19,7 +21,8 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  # config.vm.forward_port "http", 80, 8080
+  config.vm.forward_port "http", 80, 8080
+  config.vm.forward_port "tomcat", 8080, 8081
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
@@ -52,14 +55,19 @@ Vagrant::Config.run do |config|
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
   #
-  # config.vm.provision :chef_solo do |chef|
-  #    chef.cookbooks_path = "cookbooks"
-  #   chef.add_recipe "mysql"
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = "cookbooks"
+  #  chef.add_recipe "first_cookbook"
+    chef.add_recipe "apache2"
+    chef.add_recipe "java"
+    chef.add_recipe "tomcat"
+    chef.add_recipe "postgresql::server"
+   
   #   chef.add_role "web"
   #
   #   # You may also specify custom JSON attributes:
   #   chef.json = { :mysql_password => "foo" }
-  # end
+  end
 
   # Enable provisioning with chef server, specifying the chef server URL,
   # and the path to the validation key (relative to this Vagrantfile).
